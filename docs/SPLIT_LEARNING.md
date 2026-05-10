@@ -206,5 +206,3 @@ This implementation is useful for:
 - `src/train_fedlora.py` — main split learning implementation and CLI
 - `src/evaluate.py` — shared evaluation metrics
 - `src/utils.py` — data loading, device selection, result saving
-
-If you want, I can also add a short architecture diagram to this document.
