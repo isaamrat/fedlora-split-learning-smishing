@@ -1,0 +1,21 @@
+# Core ML
+transformers>=4.40.0
+peft>=0.10.0
+accelerate>=0.29.0
+safetensors>=0.4.3
+
+# Data & ML utilities
+scikit-learn>=1.4.0
+pandas>=2.0.0
+numpy>=1.26.0
+datasets>=2.18.0
+
+# Visualization
+matplotlib>=3.8.0
+tqdm>=4.66.0
+
+# Tokenization
+sentencepiece>=0.1.99
+
+# Optional: near-duplicate detection
+# datasketch>=1.6.4 

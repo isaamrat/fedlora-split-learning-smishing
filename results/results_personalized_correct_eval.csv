@@ -1,0 +1,6 @@
+client_id,category,cat_macro_f1,cat_smishing_f1,cat_smishing_fnr,global_macro_f1,global_smishing_f1,global_smishing_fnr,global_adapter_macro_f1,global_adapter_smishing_fnr
+client_1,reward_prize,0.9304,0.926,0.0525,0.6694,0.361,0.7646,0.7077,0.6063
+client_2,delivery_package,0.9339,0.923,0.129,0.5817,0.116,0.9367,0.7077,0.6063
+client_3,bank_payment,0.9112,0.893,0.0772,0.6498,0.338,0.766,0.7077,0.6063
+client_4,government_tax,0.9051,0.857,0.25,0.5808,0.116,0.9367,0.7077,0.6063
+client_5,other_smishing,0.7882,0.719,0.2375,0.676,0.484,0.5637,0.7077,0.6063

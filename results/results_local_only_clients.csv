@@ -1,0 +1,2 @@
+timestamp,experiment,avg_macro_f1,client_1_macro_f1,client_2_macro_f1,client_3_macro_f1,client_4_macro_f1,client_5_macro_f1,trainable_params
+2026-05-07 20:33,Local-Only (E3),0.621,0.6641,0.5666,0.6378,0.5569,0.6794,740355

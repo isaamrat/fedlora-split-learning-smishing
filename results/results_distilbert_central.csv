@@ -1,0 +1,2 @@
+timestamp,experiment,tag,accuracy,macro_f1,weighted_f1,macro_precision,macro_recall,smishing_fnr,smishing_fpr,ham_f1,spam_f1,smishing_f1,model,epochs,batch_size,lr,lora,trainable_params
+2026-05-07 19:54,DistilBERT Centralized (E1),distilbert_central,0.8335,0.781,0.8339,0.7805,0.7816,0.3021,0.1013,0.9796567069294342,0.6748308088946181,0.6886247877758913,distilbert-base-uncased,4,32,2e-05,False,66955779

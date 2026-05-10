@@ -1,0 +1,2 @@
+timestamp,experiment,tag,accuracy,macro_f1,weighted_f1,macro_precision,macro_recall,smishing_fnr,smishing_fpr,ham_f1,spam_f1,smishing_f1,split,n_features
+2026-05-07 22:37,TF-IDF + Logistic Regression (test),tfidf_lr_test,0.8084,0.7533,0.8089,0.7539,0.7532,0.3572,0.0975,0.9620212935007151,0.641875,0.6561292588689849,test,60000

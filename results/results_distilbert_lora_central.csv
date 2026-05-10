@@ -1,0 +1,2 @@
+timestamp,experiment,tag,accuracy,macro_f1,weighted_f1,macro_precision,macro_recall,smishing_fnr,smishing_fpr,ham_f1,spam_f1,smishing_f1,model,epochs,batch_size,lr,lora,trainable_params
+2026-05-07 19:59,DistilBERT + LoRA (E2),distilbert_lora_central,0.8233,0.7681,0.8235,0.7678,0.769,0.3035,0.1107,0.9764930114358322,0.6503107621851488,0.6776029460997657,distilbert-base-uncased,5,32,0.0003,True,740355

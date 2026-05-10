@@ -1,0 +1,6 @@
+client_id,total,ham,spam,smishing,smishing_pct
+client_1,4473,2207,1094,1172,26.2
+client_2,3601,2207,1094,300,8.3
+client_3,4353,2207,1094,1052,24.2
+client_4,3601,2207,1094,300,8.3
+client_5,5561,2207,1094,2260,40.6

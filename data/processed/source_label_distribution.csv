@@ -1,0 +1,8 @@
+source,ham,spam,smishing,total,smishing_pct
+combined_labeled_dataset,0,0,4832,4832,100.0
+english_british_sms,0,51,0,51,0.0
+exais_sms_spam,2398,1253,0,3651,0.0
+mendeley_5971,514,75,139,728,19.1
+mendeley_balanced_10191,39,1539,2292,3870,59.2
+super_sms_dataset,8829,4874,0,13703,0.0
+uci_sms_spam,3987,24,0,4011,0.0

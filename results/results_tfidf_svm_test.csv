@@ -1,0 +1,2 @@
+timestamp,experiment,tag,accuracy,macro_f1,weighted_f1,macro_precision,macro_recall,smishing_fnr,smishing_fpr,ham_f1,spam_f1,smishing_f1,split,n_features
+2026-05-07 22:37,TF-IDF + Linear SVM (test),tfidf_svm_test,0.8183,0.7613,0.8169,0.7633,0.7598,0.3613,0.0933,0.96998271255697,0.655893536121673,0.6579227224388515,test,60000

@@ -1,0 +1,9 @@
+model,dirty_macro_f1,clean_macro_f1,dirty_smishing_f1,clean_smishing_f1,dirty_fnr,clean_fnr,fnr_delta
+E4b Setting D_300 smishing (BEST),0.7,0.6732,0.484,0.409,0.6084,0.6684,0.06
+E4b Setting D_300 balanced,0.7084,0.6672,0.489,0.375,0.6228,0.7209,0.0981
+E4b Setting B smishing (main FL),0.7077,0.6721,0.494,0.395,0.6063,0.6915,0.0852
+E4b Setting B balanced,0.678,0.6379,0.39,0.271,0.7337,0.8227,0.089
+E4b Setting B sqrt,0.6751,0.6373,0.385,0.271,0.7378,0.8237,0.0859
+E4b Setting A (bug),0.6884,0.658,0.436,0.35,0.68,0.745,0.065
+E4b C_0.5,0.6003,0.5892,0.668,0.628,0.0282,0.0399,0.0117
+E4b C_1.0,0.6345,0.6137,0.676,0.631,0.0654,0.0839,0.0185
