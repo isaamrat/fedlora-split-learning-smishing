@@ -239,10 +239,10 @@ class SplitDistilBertClient(torch.nn.Module):
         )
 
     def forward(self, input_ids, attention_mask):
-        attention_mask = expand_split_attention_mask(attention_mask)
         hidden = self.embeddings(input_ids)
+        attention_mask = expand_split_attention_mask(attention_mask, hidden)
         for layer in self.transformer:
-            hidden = layer(hidden, attention_mask=attention_mask)[0]
+            hidden = first_hidden_state(layer(hidden, attention_mask=attention_mask))
         return hidden
 
 
@@ -257,24 +257,35 @@ class SplitDistilBertServer(torch.nn.Module):
         self.classifier = copy.deepcopy(base_model.classifier)
 
     def forward(self, hidden, attention_mask):
-        attention_mask = expand_split_attention_mask(attention_mask)
+        attention_mask = expand_split_attention_mask(attention_mask, hidden)
         for layer in self.transformer:
-            hidden = layer(hidden, attention_mask=attention_mask)[0]
+            hidden = first_hidden_state(layer(hidden, attention_mask=attention_mask))
         hidden = self.pre_classifier(hidden[:, 0])
         hidden = self.dropout(hidden)
         return self.classifier(hidden)
 
 
-def expand_split_attention_mask(attention_mask):
+def expand_split_attention_mask(attention_mask, hidden_states):
     """Make a tokenizer mask broadcastable for directly-called DistilBERT layers.
 
     Full DistilBERT expands the 2D tokenizer mask internally. In split learning we
     bypass the parent model and call transformer layers ourselves, so newer
-    Transformers SDPA attention needs the mask in [batch, 1, 1, seq] form.
+    Transformers SDPA attention needs the mask in [batch, 1, seq, seq] form.
     """
     if attention_mask is None or attention_mask.dim() != 2:
         return attention_mask
-    return attention_mask[:, None, None, :].bool()
+    batch_size, seq_len = hidden_states.shape[:2]
+    key_len = attention_mask.shape[-1]
+    return (
+        attention_mask.to(device=hidden_states.device, dtype=torch.bool)
+        .view(batch_size, 1, 1, key_len)
+        .expand(batch_size, 1, seq_len, key_len)
+        .contiguous()
+    )
+
+
+def first_hidden_state(layer_output):
+    return layer_output[0] if isinstance(layer_output, (tuple, list)) else layer_output
 
 
 def make_split_models(split_layer: int):
