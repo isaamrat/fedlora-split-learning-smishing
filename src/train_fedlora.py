@@ -87,6 +87,7 @@ class SMSDataset(Dataset):
             list(texts), truncation=True, padding="max_length",
             max_length=max_len, return_tensors="pt"
         )
+        self.encodings["attention_mask"] = self.encodings["attention_mask"].bool()
         self.labels = torch.tensor(labels, dtype=torch.long)
 
     def __len__(self):
@@ -119,7 +120,7 @@ def local_train(model, loader, device, class_weights, n_epochs, lr):
             optimizer.zero_grad()
             logits = model(
                 input_ids      = batch["input_ids"].to(device),
-                attention_mask = batch["attention_mask"].to(device),
+                attention_mask = batch["attention_mask"].to(device).bool(),
             ).logits
             loss = loss_fn(logits, batch["labels"].to(device))
             loss.backward()
@@ -136,7 +137,7 @@ def evaluate(model, loader, device):
     for batch in loader:
         logits = model(
             input_ids      = batch["input_ids"].to(device),
-            attention_mask = batch["attention_mask"].to(device),
+            attention_mask = batch["attention_mask"].to(device).bool(),
         ).logits
         preds.extend(logits.argmax(dim=-1).cpu().numpy())
         trues.extend(batch["labels"].numpy())
@@ -310,9 +311,9 @@ def local_split_train(client_model, server_model, loader, device, class_weights,
             optimizer.zero_grad()
             hidden = client_model(
                 input_ids=batch["input_ids"].to(device),
-                attention_mask=batch["attention_mask"].to(device),
+                attention_mask=batch["attention_mask"].to(device).bool(),
             )
-            logits = server_model(hidden, attention_mask=batch["attention_mask"].to(device))
+            logits = server_model(hidden, attention_mask=batch["attention_mask"].to(device).bool())
             loss = loss_fn(logits, batch["labels"].to(device))
             loss.backward()
             torch.nn.utils.clip_grad_norm_(
@@ -333,9 +334,9 @@ def evaluate_split(client_model, server_model, loader, device):
     for batch in loader:
         hidden = client_model(
             input_ids=batch["input_ids"].to(device),
-            attention_mask=batch["attention_mask"].to(device),
+            attention_mask=batch["attention_mask"].to(device).bool(),
         )
-        logits = server_model(hidden, attention_mask=batch["attention_mask"].to(device))
+        logits = server_model(hidden, attention_mask=batch["attention_mask"].to(device).bool())
         preds.extend(logits.argmax(dim=-1).cpu().numpy())
         trues.extend(batch["labels"].numpy())
 
