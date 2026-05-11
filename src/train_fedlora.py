@@ -239,6 +239,7 @@ class SplitDistilBertClient(torch.nn.Module):
         )
 
     def forward(self, input_ids, attention_mask):
+        attention_mask = expand_split_attention_mask(attention_mask)
         hidden = self.embeddings(input_ids)
         for layer in self.transformer:
             hidden = layer(hidden, attention_mask=attention_mask)[0]
@@ -256,11 +257,24 @@ class SplitDistilBertServer(torch.nn.Module):
         self.classifier = copy.deepcopy(base_model.classifier)
 
     def forward(self, hidden, attention_mask):
+        attention_mask = expand_split_attention_mask(attention_mask)
         for layer in self.transformer:
             hidden = layer(hidden, attention_mask=attention_mask)[0]
         hidden = self.pre_classifier(hidden[:, 0])
         hidden = self.dropout(hidden)
         return self.classifier(hidden)
+
+
+def expand_split_attention_mask(attention_mask):
+    """Make a tokenizer mask broadcastable for directly-called DistilBERT layers.
+
+    Full DistilBERT expands the 2D tokenizer mask internally. In split learning we
+    bypass the parent model and call transformer layers ourselves, so newer
+    Transformers SDPA attention needs the mask in [batch, 1, 1, seq] form.
+    """
+    if attention_mask is None or attention_mask.dim() != 2:
+        return attention_mask
+    return attention_mask[:, None, None, :].bool()
 
 
 def make_split_models(split_layer: int):
