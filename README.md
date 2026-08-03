@@ -25,11 +25,15 @@ LoRA achieves **98.3% of full fine-tune performance** at just **1.09% of paramet
 ```
 FedSmishGuard_Portable/
 ├── src/
+│   ├── shared/
+│   │   ├── dataset.py            # SMSDataset + DataLoader factory
+│   │   └── fedavg.py             # Weighted FedAvg helpers (LoRA + state-dict)
 │   ├── utils.py                  # Shared helpers, paths, constants
 │   ├── evaluate.py               # Metric computation (imported by training scripts)
 │   ├── train_baseline_tfidf.py   # TF-IDF + LR/SVM baselines (CPU)
 │   ├── train_transformer.py      # Centralized DistilBERT / LoRA
-│   ├── train_fedlora.py          # Federated LoRA training (main)
+│   ├── train_fedlora.py          # Federated LoRA training (E3 local-only / E4 FedLoRA)
+│   ├── train_split.py            # Split learning training (E3 local-only / E4 split FedAvg)
 │   └── evaluate_on_clean_test.py # Evaluate adapters on clean test
 │
 ├── data/
@@ -41,6 +45,7 @@ FedSmishGuard_Portable/
 │
 ├── models/
 │   ├── fedlora/                  # Best federated LoRA adapter (D_300 smishing)
+│   ├── split/                    # Best split learning checkpoint (D_300 smishing)
 │   ├── centralized/              # Centralized LoRA adapter (E2)
 │   └── README_MODELS.md
 │
@@ -50,7 +55,6 @@ FedSmishGuard_Portable/
 │
 ├── README.md
 ├── PROJECT_SUMMARY.md
-├── PRESENTATION_SUMMARY.md
 ├── RUN_INSTRUCTIONS.md
 ├── requirements.txt
 └── .gitignore
@@ -98,8 +102,8 @@ python src/train_fedlora.py \
 ### 4a. Train using split learning
 
 ```bash
-python src/train_fedlora.py \
-  --split --split_layer 3 --rounds 10 --local_epochs 2 --lr 2e-4 \
+python src/train_split.py \
+  --split_layer 3 --rounds 10 --local_epochs 2 --lr 2e-4 \
   --clients_dir data/clients/setting_D_300 \
   --agg_weight smishing
 ```
@@ -108,7 +112,9 @@ See `RUN_INSTRUCTIONS.md` for full reproduction steps from raw data.
 
 ---
 
-## Training Arguments (`train_fedlora.py`)
+## Training Arguments
+
+### `train_fedlora.py`
 
 | Argument | Default | Description |
 |---|---|---|
@@ -118,9 +124,20 @@ See `RUN_INSTRUCTIONS.md` for full reproduction steps from raw data.
 | `--clients_dir` | `data/clients` | Path to client CSV folder |
 | `--agg_weight` | `smishing` | Aggregation: `smishing`, `total`, `sqrt`, `balanced`, `uniform` |
 | `--local` | flag | Run local-only training (E3, no federation) |
-| `--split` | flag | Use split learning with a client/server partition instead of LoRA aggregation |
-| `--split_layer` | 3 | Number of DistilBERT layers kept on the client side in split learning |
 | `--resume` | flag | Resume from saved global adapter checkpoint |
+
+### `train_split.py`
+
+| Argument | Default | Description |
+|---|---|---|
+| `--split_layer` | 3 | Number of DistilBERT layers kept on the client side |
+| `--rounds` | 10 | Number of federated communication rounds |
+| `--local_epochs` | 2 | Local epochs per client per round |
+| `--lr` | 2e-4 | Learning rate |
+| `--clients_dir` | `data/clients` | Path to client CSV folder |
+| `--agg_weight` | `smishing` | Aggregation: `smishing`, `total`, `sqrt`, `balanced`, `uniform` |
+| `--local` | flag | Run local-only training (E3, no federation) |
+| `--resume` | flag | Resume from saved split checkpoint |
 
 Best-checkpoint saving is automatic — the adapter with highest validation F1 is saved to `models/fedlora/global_adapter_{setting}_best/`.
 

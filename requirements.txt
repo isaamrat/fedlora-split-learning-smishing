@@ -18,4 +18,7 @@ tqdm>=4.66.0
 sentencepiece>=0.1.99
 
 # Optional: near-duplicate detection
-# datasketch>=1.6.4 
+# datasketch>=1.6.4
+
+# Classical deep learning models (CNN/LSTM/GRU)
+# gensim>=4.3.0  # optional: alternative GloVe loader (wget-based loader included by default)
