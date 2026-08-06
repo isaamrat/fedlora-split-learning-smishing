@@ -81,16 +81,16 @@ python src/train_fedlora.py \
 ### 4a. Train using split learning — GPU required
 
 ```bash
-python src/train_fedlora.py \
-  --split --split_layer 3 --rounds 10 \
+python src/train_split.py \
+  --split_layer 3 --rounds 10 \
   --local_epochs 2 --lr 2e-4 \
   --clients_dir data/clients/setting_D_300 \
   --agg_weight smishing
 ```
 
 Uses `data/clients/setting_D_300/` (5 client CSVs included).  
-Saves final adapter → `models/fedlora/global_adapter_setting_D_300/`  
-Saves best val-F1 checkpoint → `models/fedlora/global_adapter_setting_D_300_best/`
+Saves final split model → `models/split/setting_D_300/`  
+Saves best val-F1 checkpoint → `models/split/setting_D_300_best/`
 
 **`--agg_weight` options:**
 
@@ -109,7 +109,10 @@ Saves best val-F1 checkpoint → `models/fedlora/global_adapter_setting_D_300_be
 | --- | --- | --- |
 | `src/utils.py` | Shared paths, labels, helpers (imported by others) | No |
 | `src/evaluate.py` | Metric computation (imported by others) | No |
+| `src/shared/dataset.py` | SMSDataset + DataLoader factory (imported by training scripts) | No |
+| `src/shared/fedavg.py` | Weighted FedAvg helpers — LoRA and state-dict variants (imported by training scripts) | No |
 | `src/train_baseline_tfidf.py` | TF-IDF + LR/SVM baselines | No |
 | `src/train_transformer.py` | Centralized DistilBERT / LoRA | Yes |
-| `src/train_fedlora.py` | Federated LoRA training | Yes |
+| `src/train_fedlora.py` | Federated LoRA training (E3 local-only / E4 FedLoRA) | Yes |
+| `src/train_split.py` | Split learning training (E3 local-only / E4 split FedAvg) | Yes |
 | `src/evaluate_on_clean_test.py` | Evaluate any adapter on clean test | Yes |
